@@ -15,6 +15,9 @@ plugins {
     `maven-publish`
 }
 
+group = "com.github.lukelast"
+version = "1-SNAPSHOT"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -42,5 +45,14 @@ testing {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            artifactId = "simplefin-kotlin"
+        }
     }
 }

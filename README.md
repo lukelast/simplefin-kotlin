@@ -3,5 +3,5 @@ Hello World
 
 # Building
 * `./gradlew test`
-* `./gradlew clean publishToMavenLocal`
+* `./gradlew clean test publishToMavenLocal`
 
