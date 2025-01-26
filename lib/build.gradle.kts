@@ -7,10 +7,8 @@
  */
 
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     alias(libs.plugins.kotlin.jvm)
-
-    // Apply the java-library plugin for API and implementation separation.
+    alias(libs.plugins.kotlin.serialization)
     `java-library`
     `maven-publish`
 }
@@ -19,16 +17,14 @@ group = "com.github.lukelast"
 version = "1-SNAPSHOT"
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api(libs.commons.math3)
+    api(libs.kotlin.serialization)
+    api(libs.ktor.client)
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation(libs.guava)
+    implementation(libs.ktor.client.cio)
 }
 
 testing {
