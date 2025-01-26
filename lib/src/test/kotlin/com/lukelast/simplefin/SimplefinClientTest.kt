@@ -1,8 +1,8 @@
-package canifin.backend
+package com.lukelast.simplefin
 
 
-import canifin.backend.simplefin.SimplefinClient
-import canifin.backend.simplefin.demoAccessUrl
+import com.lukelast.simplefin.SimplefinClient
+import com.lukelast.simplefin.demoAccessUrl
 import io.ktor.client.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json

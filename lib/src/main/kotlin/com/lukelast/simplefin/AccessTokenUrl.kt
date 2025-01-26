@@ -1,4 +1,4 @@
-package canifin.backend.simplefin
+package com.lukelast.simplefin
 
 import io.ktor.http.*
 
