@@ -20,7 +20,6 @@ class SimplefinAuthClient(private val client: HttpClient = defaultClient) : Auto
         client.close()
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     suspend fun fetchAccessUrl(setupToken: String): AccessTokenUrl {
         val requestUrl = Base64.UrlSafe.decode(setupToken).decodeToString()
         val rsp = client.post(requestUrl)
