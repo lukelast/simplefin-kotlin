@@ -7,8 +7,7 @@ import kotlinx.serialization.Serializable
 data class AccountSet(
     val errors: List<String>,
     val accounts: List<Account>,
-    @SerialName("x-api-message")
-    val xApiMessage: List<String>? = null,
+    @SerialName("x-api-message") val xApiMessage: List<String>? = null,
 )
 
 @Serializable
@@ -18,10 +17,8 @@ data class Account(
     val name: String,
     val currency: String,
     val balance: String,
-    @SerialName("available-balance")
-    val availableBalance: String? = null,
-    @SerialName("balance-date")
-    val balanceDate: Long,
+    @SerialName("available-balance") val availableBalance: String? = null,
+    @SerialName("balance-date") val balanceDate: Long,
     val transactions: List<Transaction>? = null,
     val holdings: List<Holding>? = null,
     val extra: Map<String, String>? = null
@@ -43,8 +40,7 @@ data class Holding(
 @Serializable
 data class Organization(
     val domain: String? = null,
-    @SerialName("sfin-url")
-    val sfinUrl: String,
+    @SerialName("sfin-url") val sfinUrl: String,
     val name: String? = null,
     val url: String? = null,
     val id: String? = null
@@ -58,8 +54,7 @@ data class Transaction(
     val description: String,
     val payee: String,
     val memo: String,
-    @SerialName("transacted_at")
-    val transactedAt: Long? = null,
+    @SerialName("transacted_at") val transactedAt: Long? = null,
     val pending: Boolean? = null,
     val extra: Map<String, String>? = null
 )
