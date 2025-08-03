@@ -28,9 +28,6 @@ dependencies {
 ## Usage
 
 ```kotlin
-
-SimpleAuthClient().use
-
 val setupToken = "your_setup_token_here"
 val accessToken: AccessTokenUrl = SimplefinAuthClient().use { it.fetchAccessUrl(setupToken) }
 
