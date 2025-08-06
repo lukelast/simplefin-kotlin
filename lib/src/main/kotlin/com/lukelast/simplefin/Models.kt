@@ -21,7 +21,7 @@ data class Account(
     @SerialName("balance-date") val balanceDate: Long,
     val transactions: List<Transaction>? = null,
     val holdings: List<Holding>? = null,
-    val extra: Map<String, String>? = null
+    val extra: Map<String, String>? = null,
 )
 
 @Serializable
@@ -34,7 +34,7 @@ data class Holding(
     val market_value: String,
     val purchase_price: String,
     val shares: String,
-    val symbol: String
+    val symbol: String,
 )
 
 @Serializable
@@ -43,7 +43,7 @@ data class Organization(
     @SerialName("sfin-url") val sfinUrl: String,
     val name: String? = null,
     val url: String? = null,
-    val id: String? = null
+    val id: String? = null,
 )
 
 @Serializable
@@ -56,5 +56,5 @@ data class Transaction(
     val memo: String,
     @SerialName("transacted_at") val transactedAt: Long? = null,
     val pending: Boolean? = null,
-    val extra: Map<String, String>? = null
+    val extra: Map<String, String>? = null,
 )

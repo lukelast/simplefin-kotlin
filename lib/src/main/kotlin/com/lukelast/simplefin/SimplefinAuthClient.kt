@@ -1,30 +1,39 @@
 package com.lukelast.simplefin
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.request.post
-import io.ktor.client.statement.readRawBytes
-import io.ktor.http.HttpStatusCode
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlin.io.encoding.Base64
 
 private fun defaultClient() = HttpClient(CIO) {}
 
 class SimplefinAuthClient(private val client: HttpClient = defaultClient()) : AutoCloseable {
-  override fun close() {
-    client.close()
-  }
+    override fun close() {
+        client.close()
+    }
 
-  suspend fun fetchAccessUrl(setupToken: String): AccessTokenUrl {
-    val requestUrl = Base64.Default.UrlSafe.decode(setupToken).decodeToString()
-    val rsp = client.post(requestUrl)
-    if (rsp.status == HttpStatusCode.Companion.Forbidden) {
-      error("Setup token already used")
+    /**
+     * Fetches the access token URL using the provided setup token.
+     *
+     * @param setupToken A Base64 encoded setup token given by Simplefin bridge.
+     * @return An [AccessTokenUrl] containing the user, password, and base URL.
+     * @throws SetupTokenUsedException if the setup token has already been used.
+     */
+    suspend fun fetchAccessUrl(setupToken: String): AccessTokenUrl {
+        val requestUrl = Base64.UrlSafe.decode(setupToken).decodeToString()
+        val rsp = client.post(requestUrl)
+        if (rsp.status == HttpStatusCode.Forbidden) {
+            throw SetupTokenUsedException()
+        }
+        if (rsp.status != HttpStatusCode.OK) {
+            error("Failed to fetch access token")
+        }
+        val rspText = rsp.readRawBytes().decodeToString()
+        val rspUrl = AccessTokenUrl(rspText)
+        return rspUrl
     }
-    if (rsp.status != HttpStatusCode.Companion.OK) {
-      error("Failed to fetch access token")
-    }
-    val rspText = rsp.readRawBytes().decodeToString()
-    val rspUrl = AccessTokenUrl(rspText)
-    return rspUrl
-  }
 }
+
+class SetupTokenUsedException : Exception("Setup token already used")
