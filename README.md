@@ -4,6 +4,10 @@ A Kotlin library for accessing financial data through the SimpleFIN API.
 
 ## Installation
 
+You can download the library from JitPack.
+
+https://jitpack.io/#lukelast/simplefin-kotlin
+
 ### Gradle (Kotlin DSL)
 
 ```kotlin
