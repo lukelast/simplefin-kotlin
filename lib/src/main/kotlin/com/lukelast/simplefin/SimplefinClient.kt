@@ -5,9 +5,9 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.HttpStatusCode.Companion.OK
+import kotlinx.serialization.json.Json.Default.decodeFromString
 import java.time.Instant
 import kotlin.io.encoding.Base64
-import kotlinx.serialization.json.Json.Default.decodeFromString
 
 class SimplefinClient(private val client: HttpClient = defaultHttpClient()) : AutoCloseable {
     override fun close() {

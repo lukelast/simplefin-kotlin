@@ -34,7 +34,8 @@ class AccessTokenUrl private constructor(val user: String, val pass: String, pri
                 throw InvalidAccessUrlException("Access URL must have path '/simplefin'")
             }
             val user = url.user ?: throw InvalidAccessUrlException("Missing username in access URL")
-            val pass = url.password ?: throw InvalidAccessUrlException("Missing password in access URL")
+            val pass =
+                url.password ?: throw InvalidAccessUrlException("Missing password in access URL")
             val updatedUrl =
                 URLBuilder(url)
                     .apply {
