@@ -1,6 +1,5 @@
 package com.lukelast.simplefin
 
-import io.ktor.client.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
@@ -15,17 +14,19 @@ class SimplefinClientTest {
     @Test
     fun accounts() {
         runBlocking {
-            val client = SimplefinClient(demoAccessUrl, HttpClient())
-            val accounts =
-                client.accounts(
-                    startDate = Instant.now().minus(50.days.toJavaDuration()),
-                    endDate = Instant.now(),
-                    accounts = listOf("Demo Checking"),
-                    balancesOnly = false,
-                )
-            println(accounts)
-            val jsonStr = json.encodeToString(accounts)
-            println(jsonStr)
+            SimplefinClient().use { client ->
+                val accounts =
+                    client.accounts(
+                        demoAccessUrl,
+                        startDate = Instant.now().minus(50.days.toJavaDuration()),
+                        endDate = Instant.now(),
+                        accounts = listOf("Demo Checking"),
+                        balancesOnly = false,
+                    )
+                println(accounts)
+                val jsonStr = json.encodeToString(accounts)
+                println(jsonStr)
+            }
         }
     }
 }

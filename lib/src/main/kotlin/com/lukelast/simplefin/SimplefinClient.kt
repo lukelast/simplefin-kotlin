@@ -1,25 +1,42 @@
 package com.lukelast.simplefin
 
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.HttpStatusCode.Companion.OK
-import kotlinx.serialization.json.Json.Default.decodeFromString
 import java.time.Instant
+import kotlin.io.encoding.Base64
+import kotlinx.serialization.json.Json.Default.decodeFromString
 
-private fun defaultClient() = HttpClient(CIO) {}
-
-class SimplefinClient(
-    private val token: AccessTokenUrl,
-    private val client: HttpClient = defaultClient(),
-) : AutoCloseable {
+class SimplefinClient(private val client: HttpClient = defaultHttpClient()) : AutoCloseable {
     override fun close() {
         client.close()
     }
 
+    /**
+     * Fetches the access token URL using the provided setup token.
+     *
+     * @param setupToken A Base64 encoded setup token given by Simplefin bridge.
+     * @return An [AccessTokenUrl] containing the user, password, and base URL.
+     * @throws SetupTokenUsedException if the setup token has already been used.
+     */
+    suspend fun fetchAccessUrl(setupToken: String): AccessTokenUrl {
+        val requestUrl = Base64.UrlSafe.decode(setupToken).decodeToString()
+        val rsp = client.post(requestUrl)
+        if (rsp.status == HttpStatusCode.Forbidden) {
+            throw SetupTokenUsedException()
+        }
+        if (rsp.status != OK) {
+            throw SimplefinApiException(rsp.status, rsp.bodyAsText(), "fetch access token")
+        }
+        val rspText = rsp.bodyAsText()
+        val rspUrl = AccessTokenUrl(rspText)
+        return rspUrl
+    }
+
     suspend fun accounts(
+        token: AccessTokenUrl,
         startDate: Instant? = null,
         endDate: Instant? = null,
         pending: Boolean = false,
@@ -51,7 +68,7 @@ class SimplefinClient(
                 basicAuth(token.user, token.pass)
             }
         if (rsp.status != OK) {
-            error("Failed to fetch accounts")
+            throw SimplefinApiException(rsp.status, rsp.bodyAsText(), "fetch accounts")
         }
         val rspText = rsp.bodyAsText()
         val rspObj: AccountSet = decodeFromString(rspText)

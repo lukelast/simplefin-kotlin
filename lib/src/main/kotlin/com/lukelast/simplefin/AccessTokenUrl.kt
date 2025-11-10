@@ -24,11 +24,17 @@ class AccessTokenUrl private constructor(val user: String, val pass: String, pri
     companion object {
         operator fun invoke(urlText: String): AccessTokenUrl {
             val url = Url(urlText)
-            require(url.protocol == URLProtocol.HTTPS)
-            require(url.host.contains("simplefin"))
-            require(url.segments == listOf("simplefin"))
-            val user = url.user ?: error("Missing username")
-            val pass = url.password ?: error("Missing password")
+            if (url.protocol != URLProtocol.HTTPS) {
+                throw InvalidAccessUrlException("Access URL must use HTTPS protocol")
+            }
+            if (!url.host.contains("simplefin")) {
+                throw InvalidAccessUrlException("Access URL must contain 'simplefin' in the host")
+            }
+            if (url.segments != listOf("simplefin")) {
+                throw InvalidAccessUrlException("Access URL must have path '/simplefin'")
+            }
+            val user = url.user ?: throw InvalidAccessUrlException("Missing username in access URL")
+            val pass = url.password ?: throw InvalidAccessUrlException("Missing password in access URL")
             val updatedUrl =
                 URLBuilder(url)
                     .apply {

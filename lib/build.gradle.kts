@@ -24,12 +24,7 @@ dependencies {
 
 tasks.test { useJUnitPlatform() }
 
-java {
-    toolchain {
-        //        languageVersion = JavaLanguageVersion.of(21)
-    }
-    withSourcesJar()
-}
+java { withSourcesJar() }
 
 publishing {
     publications {

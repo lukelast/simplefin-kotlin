@@ -32,12 +32,14 @@ dependencies {
 ## Usage
 
 ```kotlin
+// Create client and fetch access token
+val client = SimplefinClient()
 val setupToken = "your_setup_token_here"
-val accessToken: AccessTokenUrl = SimplefinAuthClient().use { it.fetchAccessUrl(setupToken) }
+val accessToken: AccessTokenUrl = client.fetchAccessUrl(setupToken)
 
-// Create client and fetch accounts
-val client = SimplefinClient(accessToken)
+// Fetch accounts with the access token
 val accounts = client.accounts(
+    token = accessToken,
     startDate = Instant.now().minus(Duration.ofDays(30)),
     endDate = Instant.now()
 )

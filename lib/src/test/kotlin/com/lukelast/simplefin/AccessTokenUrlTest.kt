@@ -55,14 +55,14 @@ class AccessTokenUrlTest {
     fun `constructor throws on non-HTTPS URL`() {
         val url = "http://demo:password@beta-bridge.simplefin.org/simplefin"
 
-        assertThrows<IllegalArgumentException> { AccessTokenUrl(url) }
+        assertThrows<InvalidAccessUrlException> { AccessTokenUrl(url) }
     }
 
     @Test
     fun `constructor throws on URL without credentials`() {
         val url = "https://beta-bridge.simplefin.org/simplefin"
 
-        assertThrows<IllegalStateException> { AccessTokenUrl(url) }
+        assertThrows<InvalidAccessUrlException> { AccessTokenUrl(url) }
     }
 
     @Test
@@ -78,13 +78,13 @@ class AccessTokenUrlTest {
     fun `constructor throws on invalid host`() {
         val url = "https://demo:password@invalid-host.com/simplefin"
 
-        assertThrows<IllegalArgumentException> { AccessTokenUrl(url) }
+        assertThrows<InvalidAccessUrlException> { AccessTokenUrl(url) }
     }
 
     @Test
     fun `constructor throws on invalid path`() {
         val url = "https://demo:password@beta-bridge.simplefin.org/invalid-path"
 
-        assertThrows<IllegalArgumentException> { AccessTokenUrl(url) }
+        assertThrows<InvalidAccessUrlException> { AccessTokenUrl(url) }
     }
 }
