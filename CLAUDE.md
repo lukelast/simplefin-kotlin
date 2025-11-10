@@ -60,17 +60,18 @@ All SimpleFIN exceptions extend from the sealed class `SimplefinException`:
 
 ## Key Dependencies
 
-- **Ktor**: HTTP client for API communication (CIO engine)
+- **Ktor**: HTTP client for API communication (OkHttp engine with HTTP/2 support)
 - **Kotlinx Serialization**: JSON serialization for API responses
 - **JUnit 5**: Testing framework
 
 ### HTTP Client Configuration
 The `defaultHttpClient()` function in `DefaultHttpClient.kt` provides a pre-configured Ktor HTTP client with:
-- Connection pooling (50 max connections, 50 per route)
+- OkHttp engine with HTTP/2 protocol support (with HTTP/1.1 fallback)
 - Automatic retry logic (1 retry with exponential backoff on server errors and exceptions)
-- Timeouts (60s request, 5s connect, 45s socket)
-- Keep-alive connections (60s)
-- 2 connect attempts per request
+- Timeouts (60s request, 5s connect, 60s socket)
+- Compression support (gzip, deflate)
+- Debug logging (LogLevel.INFO)
+- Redirect following disabled
 
 `SimplefinClient` uses this by default but accepts an optional `HttpClient` parameter for custom configuration or testing.
 

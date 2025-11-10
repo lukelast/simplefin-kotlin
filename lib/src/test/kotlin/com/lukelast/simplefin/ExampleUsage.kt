@@ -11,6 +11,7 @@ const val user = "demo"
 const val pass = "demo"
 val accessUrl = AccessTokenUrl(user, pass)
 private val json = Json { prettyPrint = true }
+private const val SIMPLE_LOGGER_LEVEL_PROPERTY = "org.slf4j.simpleLogger.defaultLogLevel"
 
 object FetchAccessTokenUrl {
     @JvmStatic
@@ -39,7 +40,14 @@ object FetchAccounts {
 }
 
 private fun useClient(block: suspend SimplefinClient.() -> Unit) {
+    configureSimpleLogger()
     runBlocking {
         SimplefinClient().use { client -> println("Took ${measureTime { client.block() }}") }
+    }
+}
+
+private fun configureSimpleLogger() {
+    if (System.getProperty(SIMPLE_LOGGER_LEVEL_PROPERTY).isNullOrBlank()) {
+        System.setProperty(SIMPLE_LOGGER_LEVEL_PROPERTY, "debug")
     }
 }

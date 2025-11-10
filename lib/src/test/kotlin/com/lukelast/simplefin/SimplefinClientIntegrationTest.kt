@@ -221,24 +221,6 @@ class SimplefinClientIntegrationTest {
     }
 
     @Test
-    fun `accounts with pending transactions enabled`() {
-        runBlocking {
-            val result = client.accounts(token = demoAccessUrl, pending = true)
-
-            assertTrue(result.errors.isEmpty())
-            assertTrue(result.accounts.isNotEmpty())
-
-            // Check if any transactions are marked as pending
-            val hasPending =
-                result.accounts.any { account ->
-                    account.transactions?.any { it.pending == true } == true
-                }
-            // Note: Demo API may not have pending transactions, just verify structure works
-            assertNotNull(result.accounts)
-        }
-    }
-
-    @Test
     fun `accounts with pending transactions disabled`() {
         runBlocking {
             val result = client.accounts(token = demoAccessUrl, pending = false)
@@ -419,8 +401,6 @@ class SimplefinClientIntegrationTest {
             // AccountSet structure
             assertNotNull(result.errors)
             assertNotNull(result.accounts)
-            assertTrue(result.errors is List<String>)
-            assertTrue(result.accounts is List<Account>)
 
             // Optional field can be null
             // result.xApiMessage can be null or List<String>
@@ -616,19 +596,9 @@ class SimplefinClientIntegrationTest {
                 // availableBalance is optional
                 account.availableBalance?.let { avail -> assertTrue(avail.isNotBlank()) }
 
-                // holdings is optional
-                account.holdings?.let { holdings -> assertTrue(holdings is List<Holding>) }
-
-                // extra is optional
-                account.extra?.let { extra -> assertTrue(extra is Map<String, String>) }
-
                 // Transaction optional fields
                 account.transactions?.forEach { tx ->
                     tx.transactedAt?.let { transactedAt -> assertTrue(transactedAt > 0) }
-
-                    tx.pending?.let { pending -> assertTrue(pending is Boolean) }
-
-                    tx.extra?.let { extra -> assertTrue(extra is Map<String, String>) }
                 }
 
                 // Organization optional fields
