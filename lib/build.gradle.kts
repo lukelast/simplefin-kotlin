@@ -19,6 +19,7 @@ dependencies {
 
     // Test dependencies
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.ktor.client.mock)
     testRuntimeOnly(libs.junit.platform)
 }
 
