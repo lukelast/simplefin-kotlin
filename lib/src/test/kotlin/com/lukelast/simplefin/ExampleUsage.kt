@@ -1,5 +1,6 @@
 package com.lukelast.simplefin
 
+import io.ktor.client.plugins.logging.LogLevel
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import java.time.Instant
@@ -42,7 +43,7 @@ object FetchAccounts {
 private fun useClient(block: suspend SimplefinClient.() -> Unit) {
     configureSimpleLogger()
     runBlocking {
-        SimplefinClient().use { client -> println("Took ${measureTime { client.block() }}") }
+        SimplefinClient(defaultHttpClient(LogLevel.INFO)).use { client -> println("Took ${measureTime { client.block() }}") }
     }
 }
 

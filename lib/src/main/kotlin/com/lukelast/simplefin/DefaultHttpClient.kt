@@ -8,7 +8,7 @@ import io.ktor.client.plugins.logging.*
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds
 
-fun defaultHttpClient(logLevel: LogLevel = LogLevel.INFO) =
+fun defaultHttpClient(logLevel: LogLevel = LogLevel.NONE) =
     HttpClient(OkHttp) {
         engine {
             config {
